@@ -1,9 +1,9 @@
-[submodule "ASOSB"]
-	path = ASOSB
-	url = https://github.com/zeu5/ASOSB.git
-[submodule "BillofBytes"]
-	path = BillofBytes
-	url = https://github.com/zeu5/BillofBytes.git
-[submodule "GitHub-Activity"]
-	path = GitHub-Activity
+[submodule "modules/ghactivity"]
+	path = modules/ghactivity
 	url = https://github.com/zeu5/GitHub-Activity.git
+[submodule "modules/asosb"]
+	path = modules/asosb
+	url = https://github.com/zeu5/ASOSB.git
+[submodule "modules/billofbytes"]
+	path = modules/billofbytes
+	url = https://github.com/zeu5/BillofBytes.git
