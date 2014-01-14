@@ -1,0 +1,15 @@
+*{
+	margin:0;
+	padding:0;
+	-webkit-font-smoothing: antialiased;
+	font-smoothing: antialiased;
+}
+#header{
+	color:#FFF;
+	background-color:#88F;
+	font-family:Arial;
+}
+#header h1 h2 h3{
+	width:100%;
+	text-align:center;
+}
