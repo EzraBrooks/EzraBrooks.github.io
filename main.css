@@ -8,6 +8,7 @@
 }
 body{
 	font-size:62.5%;
+	background-image:url('tilepcb.png');
 }
 h1,h2,h3{
 	font-family:"Roboto";
@@ -16,23 +17,26 @@ p, ul, ol{
 	font-family:"Roboto Slab";
 }
 #languages{
-	height:50%;
 	margin:auto;
-	padding-right:3em;
-	float:right;
+	padding:2em;
 	font-size:2em;
 }
 #container{
 	width:50vw;
+	padding:25px;
 	margin:auto;
+	background: rgba(255,255,255,.75);
 }
 #container h1{
+	padding-top:1em;
 	font-size:2em;
 }
 #container h2{
+	padding-top:.75em;
 	font-size:1.75em;
 }
 #container p{
+	padding-top:.5em;
 	font-size:1.5em;
 }
 .m-cover {
