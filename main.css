@@ -26,6 +26,8 @@ p, ul, ol{
 	padding:25px;
 	margin:auto;
 	background: rgba(255,255,255,.75);
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
 }
 #container h1{
 	padding-top:1em;
