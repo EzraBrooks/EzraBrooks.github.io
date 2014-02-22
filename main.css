@@ -16,6 +16,29 @@ h1,h2,h3{
 p, ul, ol{
 	font-family:"Roboto Slab";
 }
+a:link{
+	color:#FFF;
+	text-shadow:
+   -1px -1px 0 #000,  
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+     1px 1px 0 #000;
+    text-decoration:none;
+    border-bottom:1px dashed #333;
+}
+a:visited{
+	color:#FFF;
+	text-shadow:
+   -1px -1px 0 #000,  
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+     1px 1px 0 #000;
+    border-bottom:1px dashed #333;
+}
+a[href ^="http"] {
+	padding: 5px 20px 0 0;
+    background: url(img/icon_external.gif) no-repeat right 50%;
+}
 #languages{
 	margin:auto;
 	padding:2em;
@@ -103,4 +126,11 @@ p, ul, ol{
 	transition-delay: initial;
 	color: #fff;
 	line-height: 1.2;
+}
+.picture{
+	width: 200px;
+	height: 200px;
+	border-radius: 150px;
+	-webkit-border-radius: 150px;
+	-moz-border-radius: 150px;
 }
