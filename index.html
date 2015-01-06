@@ -3,6 +3,8 @@ layout: default
 ---
 
 {% for post in site.posts %}
-	<h3>{{ post.title }}</h3>
-	<p>{{ post.excerpt }}</p>
+	<div class="blog-post">
+		<h3>{{ post.title }}</h3>
+		<p>{{ post.excerpt }}</p>
+	</div>
 {% endfor %}
