@@ -790,6 +790,9 @@ footer a:hover {
   #main-content {
     width: 100vw;
   }
+  #main-content .inner{
+    width: 100%;
+  }
   #main-content h1:before,
   #main-content h2:before,
   #main-content h3:before,
@@ -843,7 +846,12 @@ footer a:hover {
     display: inline;
     font-size: 13px;
   }
-
+  #main-content{
+    width:100vw;
+  }
+  #main-content .inner{
+    width:100%;
+  }
   #main-content h1:before,
   #main-content h2:before,
   #main-content h3:before,
