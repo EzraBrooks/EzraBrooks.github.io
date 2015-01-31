@@ -6,5 +6,8 @@ layout: default
 	<article class="post">
 		<a href="{{ site.baseurl }}{{ post.url }}"><h3>{{ post.title }}</h3></a>
 		<div class="post-content">{{ post.excerpt }}</div>
+        {% capture excerpt_length %}{{ post.excerpt | size }}{% endcapture %}
+        {% capture post_length %}{{ post.output | size }}{% endcapture %}
+        {% if post_length > excerpt_length %}<a href="{{ site.baseurl }}{{ post.url }}" class="jumplink">Read More</a>{% endif %}
 	</article>
 {% endfor %}
