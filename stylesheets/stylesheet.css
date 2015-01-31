@@ -497,11 +497,11 @@ header h2 {
   max-width: 100%;
 }
 
-.blog-post{
+article .post{
   border-bottom: medium dotted #ccc;
 }
 
-.blog-post img{
+.post img{
   padding:1vh;
 }
 
