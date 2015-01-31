@@ -496,7 +496,7 @@ header h2 {
   max-width: 100%;
 }
 
-article .post{
+.post{
   border-bottom: medium dotted #ccc;
 }
 
