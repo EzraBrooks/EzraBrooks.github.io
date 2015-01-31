@@ -8,6 +8,7 @@ layout: default
 		<div class="post-content">{{ post.excerpt }}</div>
         {% capture excerpt_length %}{{ post.excerpt | size }}{% endcapture %}
         {% capture post_length %}{{ post.content | size }}{% endcapture %}
-        {% if post.content.length > post.excerpt.length %}<a href="{{ site.baseurl }}{{ post.url }}" class="jumplink">Read More</a>{% endif %}
+        {% capture difference %}{{ excerpt_length | minus:post_length }}{% endcapture %}
+        {% if difference contains '-' %}<a href="{{ site.baseurl }}{{ post.url }}" class="jumplink">Read More</a>{% endif %}
 	</article>
 {% endfor %}
