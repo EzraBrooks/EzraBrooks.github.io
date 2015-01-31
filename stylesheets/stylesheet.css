@@ -502,7 +502,11 @@ article .post{
 }
 
 .post img{
-  padding:1vh;
+  padding:10px;
+}
+
+.post p{
+  padding-top:10px;
 }
 
 #downloads {
