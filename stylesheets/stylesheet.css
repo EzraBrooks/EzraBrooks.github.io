@@ -509,6 +509,18 @@ header h2 {
   line-height:1.5;
 }
 
+.jumplink a:link{
+  color: rgb(22, 149, 179);
+}
+
+.jumplink a:hover{
+  color: rgb(31, 186, 223);
+}
+
+.jumplink a:visited{
+  color: rgb(22, 149, 179);
+}
+
 #downloads {
   margin-bottom: 40px;
 }
