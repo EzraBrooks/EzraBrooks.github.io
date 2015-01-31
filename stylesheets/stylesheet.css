@@ -501,8 +501,8 @@ header h2 {
   border-bottom: medium dotted #ccc;
 }
 
-.blog-post p{
-  padding-bottom: 1vh;
+.blog-post img{
+  padding:1vh;
 }
 
 aside#sidebar {
