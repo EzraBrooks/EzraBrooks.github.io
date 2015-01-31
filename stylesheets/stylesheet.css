@@ -501,6 +501,10 @@ header h2 {
   border-bottom: medium dotted #ccc;
 }
 
+.blog-post p{
+  padding-bottom: 1vh;
+}
+
 aside#sidebar {
   float: right;
   width: 200px;
