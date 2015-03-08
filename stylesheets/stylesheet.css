@@ -454,22 +454,6 @@ header {
   border-bottom: solid 1px #275da1;
 }
 
-#navbar {
-  width: 50vw;
-  margin: auto;
-  list-style-type: none;
-}
-
-#navbar li{
-  display: inline;
-}
-
-#navbar li ~ li{
-  padding-left: 0.5vw;
-  margin-left: 0.5vw;
-  border-left: 1px dotted;
-}
-
 header h1 {
   width: 540px;
   margin-top: 0;
