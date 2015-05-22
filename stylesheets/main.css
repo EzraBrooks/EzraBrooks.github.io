@@ -1,0 +1,25 @@
+body{
+  margin:0;
+  padding:0;
+}
+
+#containerbar{
+  text-align: center;
+  margin: 0 auto;
+  margin-top: 33vh;
+  height: 33vh;
+  width: 100vw;
+  background: #7777FF;
+}
+
+#containerbar li{
+  display: inline-block;
+  margin: auto;
+  margin-top: 10vh;
+  margin-bottom: 10vh;
+}
+
+#containerbar li img{
+  height: 10vh;
+  width: auto;
+}
