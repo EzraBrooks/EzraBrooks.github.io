@@ -1,15 +1,20 @@
 body{
   margin:0;
   padding:0;
+  background: #aaa;
 }
 
+/* TODO: Make scale to portrait resolutions */
 #containerbar{
+  padding: 0;
   text-align: center;
   margin: 0 auto;
   margin-top: 33vh;
   height: 33vh;
   width: 100vw;
-  background: #7777FF;
+  list-style-type: none;
+  background: #6666FF;
+  box-shadow: 0vh 0vh 1vh 0.5vh #777;
 }
 
 #containerbar li{
