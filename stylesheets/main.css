@@ -1,30 +1,55 @@
-body{
-  margin:0;
-  padding:0;
-  background: #aaa;
+@import url(https://fonts.googleapis.com/css?family=Open+Sans);
+
+#header {
+	width: 75vw;
+	margin: 0 auto;
+	background-color: #99F;
 }
 
-/* TODO: Make scale to portrait resolutions */
-#containerbar{
-  padding: 0;
-  text-align: center;
-  margin: 0 auto;
-  margin-top: 33vh;
-  height: 33vh;
-  width: 100vw;
-  list-style-type: none;
-  background: #6666FF;
-  box-shadow: 0vh 0vh 1vh 0.5vh #777;
+#socialIcons {
+	margin-bottom: 16vh;
+	margin-top: -10vh;
 }
 
-#containerbar li{
-  display: inline-block;
-  margin: auto;
-  margin-top: 10vh;
-  margin-bottom: 10vh;
+#header h1 {
+	color: white;
+	padding-top: 4vh;
+	padding-left: 0.5vw;
+	margin-top: 5vh;
+	font-family: "Open Sans";
 }
 
-#containerbar li img{
-  height: 10vh;
-  width: auto;
+#header h1 a {
+	text-decoration: none;
+}
+
+#socialIcons ul, #socialIcons li {
+	list-style-type: none;
+	margin: 0;
+	padding-right: 0.5vw;
+	float: right;
+}
+
+#socialIcons li {
+	display: inline-block;
+}
+
+.socialIcon {
+	width: 3vw;
+	height: 3vw;
+}
+
+#container {
+	width: 75vw;
+	margin: 0 auto;
+}
+
+#blog {
+	width: 75%;
+	float: left;
+}
+
+#sidebar {
+	width: 25%;
+	float: right;
 }

@@ -1,13 +1,14 @@
-<html>
-	<head>
-		<title>Ezra Brooks</title>
-		<link rel="stylesheet" type="text/css" href="stylesheets/main.css"/>
-	</head>
-	<body>
-		<ul id="containerbar">
-			<li><a href="https://www.twitter.com/Ezra_M_Brooks"><img src="images/twitter-icon.svg"></img></a></li>
-			<li><a href="https://www.github.com/EzraBrooks"><img src="images/github-icon.svg"></img></a></li>
-			<li><a href="https://www.linkedin.com/profile/view?id=372260518"><img src="images/linkedin-icon.svg"></img></a></li>
-		</ul>
-	</body>
-</html>
+---
+layout: default
+title: Home
+---
+
+<ul>
+  {% for post in site.posts %}
+    <li>
+      <a href="{{ post.url }}">{{ post.title }}</a>
+	  <div class="postDate">{{ post.date }}</div>
+      {{ post.excerpt }}
+    </li>
+  {% endfor %}
+</ul>
