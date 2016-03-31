@@ -1,0 +1,3 @@
+[submodule "scripts/HubLinker"]
+	path = scripts/HubLinker
+	url = git@github.com:EzraBrooks/HubLinker.git
