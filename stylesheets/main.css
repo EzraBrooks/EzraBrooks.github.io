@@ -84,6 +84,7 @@ h3 {
 
 #sidebar li {
 	list-style: none;
+	margin-bottom: 1vh;
 }
 
 .postDate {
