@@ -1,5 +1,9 @@
 @import url(https://fonts.googleapis.com/css?family=Open+Sans);
 
+a {
+	text-decoration: none;
+}
+
 #header {
 	width: 75vw;
 	margin: 0 auto;
@@ -16,10 +20,6 @@
 	padding-left: 0.5vw;
 	margin-top: 5vh;
 	font-family: "Open Sans";
-}
-
-#header h1 a {
-	text-decoration: none;
 }
 
 #socialIcons ul, #socialIcons li {
