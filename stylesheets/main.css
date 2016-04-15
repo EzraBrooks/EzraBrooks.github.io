@@ -1,11 +1,22 @@
 @import url(https://fonts.googleapis.com/css?family=Open+Sans);
+@import url(https://fonts.googleapis.com/css?family=Slabo+27px);
 
 a {
 	text-decoration: none;
+	color: #0873AA;
+}
+
+a:hover {
+	color: darkslategrey;
+	text-decoration: underline;
 }
 
 h1, h2, h3, h4 {
 	font-family: "Open Sans";
+}
+
+p, li {
+	font-family: "Slabo 27px";
 }
 
 h3 {
