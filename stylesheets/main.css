@@ -1,5 +1,5 @@
 @import url(https://fonts.googleapis.com/css?family=Open+Sans);
-@import url(https://fonts.googleapis.com/css?family=Slabo+27px);
+@import url(https://fonts.googleapis.com/css?family=Merriweather);
 
 a {
 	text-decoration: none;
@@ -16,7 +16,7 @@ h1, h2, h3, h4 {
 }
 
 p, li {
-	font-family: "Slabo 27px";
+	font-family: "Merriweather";
 }
 
 h3 {
