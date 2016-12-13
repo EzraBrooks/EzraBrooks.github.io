@@ -1,6 +1,20 @@
 @import url(https://fonts.googleapis.com/css?family=Open+Sans);
 @import url(https://fonts.googleapis.com/css?family=Merriweather);
 
+body {
+	margin-left: 0;
+	padding-left: 0;
+}
+
+hr {
+	margin-top: 1vh;
+	margin-bottom: 2vh;
+	border-top-color: #EEE;
+	margin-left: 0;
+	padding-left: 0;
+	width: 100vw;
+}
+
 a {
 	text-decoration: none;
 	color: #0873AA;
@@ -20,6 +34,7 @@ p, li {
 }
 
 h3 {
+	margin-top: 0;
 	margin-bottom: 0;
 }
 
@@ -28,30 +43,27 @@ h3 {
 	margin: 0 auto;
 }
 
-#socialIcons {
-	margin-bottom: 16vh;
-	margin-top: -10vh;
-}
-
 #header h1 {
+	display: inline;
 	color: white;
 	padding-top: 4vh;
 	padding-left: 0.5vw;
-	margin-top: 5vh;
+	max-width: 50%;
 }
 
-#socialIcons ul, #socialIcons li {
+ul#socialIcons {
+	padding-left: 0;
+	display: inline;
 	list-style-type: none;
 	margin: 0;
 	padding-right: 0.5vw;
-	float: right;
 }
 
-#socialIcons li {
-	display: inline-block;
+li.socialIcon {
+	display: inline;
 }
 
-.socialIcon {
+.socialIcon img {
 	width: 3vw;
 	height: 3vw;
 }
@@ -59,7 +71,6 @@ h3 {
 #container {
 	width: 75vw;
 	margin: 0 auto;
-	box-shadow: 10px 10px 5px grey;
 }
 
 #blog {
@@ -70,6 +81,7 @@ h3 {
 #blog ul {
 	list-style: none;
 	padding-left: 0.5vw;
+	margin-top: 0;
 }
 
 #sidebar {
@@ -78,6 +90,7 @@ h3 {
 }
 
 #sidebar ul, #sidebar h4 {
+	margin-top: 0;
 	padding-left: 0;
 	margin-left: 2vw;
 }
