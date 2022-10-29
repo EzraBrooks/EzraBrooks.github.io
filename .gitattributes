@@ -1,4 +1,4 @@
 # Don't include config files in language stats.
 .eslintrc.cjs linguist-vendored
 svelte.config.js linguist-vendored
-vite.config.ts
+vite.config.ts linguist-vendored
