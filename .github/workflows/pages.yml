@@ -34,7 +34,7 @@ jobs:
         uses: actions/configure-pages@v2
       - uses: actions/setup-node@v3
         with:
-          node-version: '14'
+          node-version: '18'
           cache: 'npm'
       - run: npm ci
       - run: npm run build
