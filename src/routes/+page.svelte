@@ -33,7 +33,7 @@
 
 <script>
   import Icon from "svelte-awesome";
-  import { githubSquare, linkedinSquare } from "svelte-awesome/icons";
+  import { envelopeSquare, githubSquare, linkedinSquare } from "svelte-awesome/icons";
 </script>
 
 <div id="wrapper">
@@ -44,6 +44,9 @@
     </a>
     <a href="https://linkedin.com/in/ezra-brooks">
       <Icon data={linkedinSquare} style="height: 5ch; width: 5ch;"/>
+    </a>
+    <a href="mailto:bytes-legwork.0q@icloud.com">
+      <Icon data={envelopeSquare} style="height: 5ch; width: 5ch;"/>
     </a>
   </div>
 </div>
