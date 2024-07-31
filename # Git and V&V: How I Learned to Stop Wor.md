@@ -1,0 +1,415 @@
+# Git and V&V: How I Learned to Stop Worrying and Love the Merge
+
+## Every Engineer Gets "Bit by Git"
+
+It's no secret that Git falls into the category of tools that are so powerful that novices routinely cause unsolvable (or seemingly so) issues by experimenting with commands they don't fully understand yet.
+It's also no secret that "fully understanding" any one Git command is probably a fool's errand, and you'll still be learning new things for the next decade.
+Through the process of learning Git, you experience a lot of confusion (what the hell is a `detached HEAD`? that sounds painful) and generally make a mess of your repository's history.
+You probably end up with something like this (or much worse):
+
+```mermaid
+gitGraph
+  commit id: "Initial commit"
+  commit id: "Cool new feature"
+  commit id: "Cool new feature attempt 2"
+  commit id: "FIX IT"
+  commit id: "revert FIX IT" type: REVERSE
+  commit id: "revert Cool new feature attempt 2" type: REVERSE
+  commit id: "revert Cool new feature" type: REVERSE
+  branch new_feature
+  checkout new_feature
+  commit id: "working on a new branch to not screw up main this time"
+  checkout main
+  commit id: "figured it out"
+  checkout new_feature
+  commit id: "back to working on new feature"
+  merge main id: "merge main into nice_feature"
+  checkout main
+  commit id: "minor tweak to prod"
+  checkout new_feature
+  commit id: "aw yiss"
+  merge main id: "merge main into nice_feature again"
+  checkout main
+  merge new_feature
+```
+
+Once you've learned enough from your mistakes to be competently branching, staging, committing, and merging, you encounter a curious and enticing new command: `git rebase`.
+
+## Rebasing is `/aw(esome|ful)/`
+
+I've got nearly a decade of professional Git experience, and even more from my high school and college days, and I still sometimes accidentally obliterate a change while rebasing.
+Hopefully that change was my own and doesn't belong to someone else who I now have to explain myself to.
+**The ways you can get yourself into horrible broken states with `rebase` and any other history-rewriting verb are myriad, so I will not cover them here. Learn them, but avoid them when you can!**
+
+Everyone who's used the `rebase` verb knows that it's one of Git's most useful swiss army knives.
+Reverting something on your development branch? Rebase and drop that commit.
+Renaming commits en masse? Rebase and reword.
+Made too many tiny commits iterating on one single over-arching change? Rebase and squash them together.
+
+It's easy to see why engineers love `git rebase` because just using it once on the above example cleans the history up an order of magnitude.
+
+### Before a single invocation of `git rebase main`
+
+```mermaid
+gitGraph
+  commit id: "Initial commit"
+  commit id: "Cool new feature"
+  commit id: "Cool new feature attempt 2"
+  commit id: "FIX IT"
+  commit id: "revert FIX IT" type: REVERSE
+  commit id: "revert Cool new feature attempt 2" type: REVERSE
+  commit id: "revert Cool new feature" type: REVERSE
+  branch new_feature
+  checkout new_feature
+  commit id: "working on a new branch to not screw up main this time"
+  checkout main
+  commit id: "figured it out"
+  checkout new_feature
+  commit id: "back to working on new feature"
+  merge main id: "merge main into nice_feature"
+  checkout main
+  commit id: "minor tweak to prod"
+  checkout new_feature
+  commit id: "aw yiss"
+  merge main id: "merge main into nice_feature again"
+  checkout main
+  merge new_feature
+```
+
+### After a single invocation of `git rebase main` (and maybe some merge conflict resolution)
+
+```mermaid
+gitGraph
+  commit id: "Initial commit"
+  commit id: "Cool new feature"
+  commit id: "Cool new feature attempt 2"
+  commit id: "FIX IT"
+  commit id: "revert FIX IT" type: REVERSE
+  commit id: "revert Cool new feature attempt 2" type: REVERSE
+  commit id: "revert Cool new feature" type: REVERSE
+  commit id: "figured it out"
+  commit id: "minor tweak to prod"
+  branch new_feature
+  checkout new_feature
+  commit id: "working on a new branch to not screw up main this time"
+  commit id: "back to working on new feature"
+  commit id: "aw yiss"
+  checkout main
+  merge new_feature
+```
+
+### Rebasing again for commit cleanup
+
+Running an interactive rebase, you can reword and squash those three iterations of the same feature on `new_feature`:
+
+```shell
+git rebase -i main
+```
+
+```text
+reword working on a new branch to not screw up main this time
+squash back to working on new feature
+squash aw yiss
+```
+
+And now your history is even more readable to yourself and your coworkers.
+
+```mermaid
+gitGraph
+  commit id: "Initial commit"
+  commit id: "Cool new feature"
+  commit id: "Cool new feature attempt 2"
+  commit id: "FIX IT"
+  commit id: "revert FIX IT" type: REVERSE
+  commit id: "revert Cool new feature attempt 2" type: REVERSE
+  commit id: "revert Cool new feature" type: REVERSE
+  commit id: "figured it out"
+  commit id: "minor tweak to prod"
+  branch new_feature
+  checkout new_feature
+  commit id: "Implemented new feature (closes #1)"
+  checkout main
+  merge new_feature
+```
+
+That's the awesome part of rebasing. You'll discover the awful part yourself, if you haven't already.
+(Tip: try enabling [`git rerere`](https://git-scm.com/docs/git-rerere) to make it a little less painful)
+
+## Hooked on Rebasing: The Gateway Drug to Untraceable Versioning Practices
+
+Now we've learned our lessons about things like committing directly to main and how to rewrite the history of feature branches, and we're addicted to "clean" git history.
+We've been lucky enough to be starting on a green-field project next, so we're able to take these learnings and implement them from square one on a new repo, and it. is. **glorious**.
+Our perfect and beautiful Git history is a joy to behold:
+
+```mermaid
+gitGraph
+  commit id: "Initial commit"
+  branch new_feature
+  checkout new_feature
+  commit id: "Implement first feature (closes #1)"
+  checkout main
+  merge new_feature
+  branch feature_2
+  branch feature_3
+  checkout feature_2
+  commit id: "Implement second feature (closes #2)"
+  checkout feature_3
+  commit id: "Implement third feature (closes #3)"
+  checkout main
+  merge feature_3
+  merge feature_2
+```
+
+But there's a feeling tugging at the back of our reptile brain.. What if it could be cleaner? What if we could avoid the inter-weaving merge lines entirely?
+Wouldn't it be so nice if we were able to work on feature branches to prevent conflicts, but have a Git history that looks as clean as pushing directly to main?
+
+```mermaid
+gitGraph
+  commit id: "Initial commit"
+  commit id: "Implement second feature (closes #2)"
+  commit id: "Implement second feature (closes #3)"
+```
+
+Then we discover the inviting comfort of the **squash merge**.
+
+## Squash Merging: But Why? .gif
+
+At this point we're deep into mis-conflating "clean Git history" with "clean development practices".
+We learned as novices that you shouldn't develop directly on main for many good reasons, but now we are addicted to the sight of "simple" and "linear" history in our commit graph and want to return to something that emulates developing directly on main.
+We discover in our Git hosting service (in the case of many, GitHub) that there's a way to set the `main` branch to require linear history.
+Okay, no arguments there - I've checked the box.
+We also discover in merging our PRs the little drop-down that lets us chose between merging, rebase-merging, and squash-merging.
+Now that linear history is required, it doesn't let us use the normal merge and points us toward squash-merging.
+
+What's squash-merging, we ask ourselves?
+The documentation from the Git CLI (which I never read until now) about `--squash` reads as follows:
+
+```text
+Produce the working tree and index state as if a real merge happened (except for the merge information), but do not actually make a commit, move the HEAD, or record $GIT_DIR/MERGE_HEAD (to cause the next git commit command to create a merge commit). This allows you to create a single commit on top of the current branch whose effect is the same as merging another branch (or more in case of an octopus).
+```
+
+More likely, instead of reading the documentation, we just try it.
+And it works!
+It generates the beautiful graph from above that looks as if we've all been working directly on main and magically avoiding conflicts with each other.
+As the documentation says, it does the merge without actually creating the merge information, thereby making it look like our whole branch was one beautiful, atomic, pristine commit.
+
+The beauty of "linear history" is reason enough for us to move forward with it as our project's preferred setting for merging PRs.
+We adopt it and never look back!
+
+## Post-Release Traumatic Squash Disorder
+
+We've been moving fast up until now.
+Our greenfield project is rapidly approaching a 1.0 release because we've been able to break whatever we want since nobody's using it yet.
+A wonderful feeling as an engineer, but one that always comes to an end.
+It's time for 1.0, and our team is committed to making sure that released versions are stable while we continue moving forward on `main`, so we branch our release when we're ready.
+
+```mermaid
+gitGraph
+  commit id: "Prep for 1.0 release"
+  branch 1.0
+  checkout 1.0
+  commit id: "add release notes we forgot to write"
+  commit id: "minor fix before pushing to prod" tag: "1.0.0"
+  checkout main
+  commit id: "new feature"
+  merge 1.0
+```
+
+... Wait.
+We've got project rules in place that enforce that `main` must have linear history.
+How do we get hotfixes for versions back onto `main`?
+Do we squash them?
+If we do, we end up with something like this:
+
+```mermaid
+gitGraph
+  commit id: "Prep for 1.0 release"
+  branch 1.0
+  checkout 1.0
+  commit id: "minor fix before pushing to prod" tag: "1.0.0"
+  checkout main
+  commit id: "new feature"
+  commit id: "all 1.0.0 changes"
+```
+
+Seems fine, I guess.
+It makes sense that 1.0 would be "behind main" in this way, right?
+But, subtly, this is where our troubles begin.
+Our next release, 2.0, approaches, and we create a branch.
+
+```mermaid
+gitGraph
+  commit id: "Prep for 1.0 release"
+  branch 1.0
+  checkout 1.0
+  commit id: "minor fix before pushing to prod" tag: "1.0.0"
+  checkout main
+  commit id: "new feature"
+  commit id: "all 1.0.0 changes"
+  commit id: "2.0 feature"
+  commit id: "another 2.0 feature"
+  branch 2.0
+  checkout 2.0
+  commit id: "Hotfix reported by QA " tag: "2.0.0"
+```
+
+But wait!
+Our biggest customer just reported a bug on 1.0.
+Unfortunately they cannot upgrade to 2.0 for a few weeks, due to an upcoming presentation to their stakeholders.
+They really need this fix applied to 1.0, and fast.
+We double-check and find that the bug exists on both 1.0 *and* 2.0, so both need a retroactive patch.
+Thankfully the code in that component hasn't changed much, so we're able to make one fix and open two PRs from it.
+
+```mermaid
+gitGraph
+  commit id: "Prep for 1.0 release"
+  branch 1.0
+  checkout 1.0
+  commit id: "minor fix before pushing to prod" tag: "1.0.0"
+  checkout main
+  commit id: "new feature"
+  commit id: "all 1.0.0 changes"
+  commit id: "2.0 feature"
+  commit id: "another 2.0 feature"
+  branch 2.0
+  checkout 2.0
+  commit id: "Hotfix reported by QA " tag: "2.0.0"
+  checkout 1.0
+  branch important-customer-fix
+  checkout important-customer-fix
+  commit id: "Fix the big nasty bug"
+```
+
+We go to open our PRs from `important-customer-fix` to versions 1.0 and 2.0 and find something really nasty.
+Trying to merge it into 2.0 has inscrutable merge conflicts - how could this happen? The actual code being changed isn't even a part of the merge conflicts.
+
+The culprits is the squash commit:
+
+```mermaid
+gitGraph
+  commit id: "Prep for 1.0 release"
+  branch 1.0
+  checkout 1.0
+  commit id: "minor fix before pushing to prod" tag: "1.0.0"
+  checkout main
+  commit id: "new feature"
+  commit id: "all 1.0.0 changes" type: HIGHLIGHT
+  commit id: "2.0 feature"
+  commit id: "another 2.0 feature"
+  branch 2.0
+  checkout 2.0
+  commit id: "Hotfix reported by QA " tag: "2.0.0"
+  checkout 1.0
+  branch important-customer-fix
+  checkout important-customer-fix
+  commit id: "Fix the big nasty bug"
+```
+
+By squashing all the changes that were made on the `1.0` branch into one single commit, you created one commit with a unique hash on the Git commit graph that contains the same changes as other commits in the graph.
+Now, merging your important bugfix from `1.0`, which has the "real changes" from before the squash, you're encountering merge conflicts because Git doesn't know that it's exactly the same changes because they're not the same hash.
+If two commits have the same hash, Git knows they don't need to be compared.
+
+If we went back in time and had done a traditional merge instead of a rebase, we could easily merge our new hotfix:
+
+```mermaid
+gitGraph
+  commit id: "Prep for 1.0 release"
+  branch 1.0
+  checkout 1.0
+  commit id: "minor fix before pushing to prod" tag: "1.0.0"
+  checkout main
+  commit id: "new feature"
+  merge 1.0
+  commit id: "2.0 feature"
+  commit id: "another 2.0 feature"
+  branch 2.0
+  checkout 2.0
+  commit id: "Hotfix reported by QA " tag: "2.0.0"
+  checkout 1.0
+  branch important-customer-fix
+  checkout important-customer-fix
+  commit id: "Fix the big nasty bug"
+  checkout 1.0
+  merge important-customer-fix tag: "1.0.1"
+  checkout 2.0
+  merge important-customer-fix tag: "2.0.1"
+  checkout main
+  merge 2.0
+```
+
+With two PRs from one feature branch, no merge conflicts, and no history rewriting, we were able to apply a hotfix to two release trains and then to main.
+I won't argue that it isn't uglier, but I *can't* argue that it isn't more effective.
+
+## Cherry-Picking: It's Just Rebasing With ~~Extra~~ Fewer Steps
+
+Cherry-picking has exactly the same problem.
+The first sentence of the documentation for `git cherry-pick` is as follows:
+
+
+```text
+Given one or more existing commits, apply the change each one introduces, recording a new commit for each.
+```
+
+The important detail here is **recording a new commit for each**.
+I've worked with many engineers who are highly proficient in Git that do not understand that cherry-picking is *not* "copying a commit to another branch".
+Copying a commit to another branch is actually (practically) impossible, because the commit's parent in the graph is the previous commit on whichever branch you were working.
+As a result, tools like `cherry-pick` copy the *changes* from the commit, but not the Git metadata.
+
+This can cause the same problem described above, but is often encountered when working in a different direction.
+Many projects that encounter this pain by operating like this:
+
+```mermaid
+gitGraph
+  commit id: "initial commit"
+  commit id: "new feature"
+  branch 1.0
+  checkout 1.0
+  commit id: "release 1.0.0" tag: "1.0.0"
+  checkout main
+  commit id: "another new feature"
+  branch 2.0
+  checkout 2.0
+  commit id: "release 2.0.0" tag: "2.0.0"
+  checkout main
+  commit id: "fix a nasty bug"
+  checkout 1.0
+  cherry-pick id: "fix a nasty bug"
+  checkout 2.0
+  cherry-pick id: "fix a nasty bug"
+```
+
+This is acting almost identically to `merge --squash` above and often generates the same horrible merge conflicts.
+I would generally recommend against this workflow whenever possible.
+Cherry-picking is very useful when you *accidentally* fix a bug on `main` and need to backport it, but if you're deliberately fixing a bug on multiple versions, I would recommend fixing it on the oldest version and porting it *forward* instead of *backward* so that you can maintain the commit's identity via merges.
+
+## Conclusions
+
+### Preferge the Merge
+
+I work on a very complex project that has merged thousands of PRs.
+While we have a cultural attachment to squash-merging that pre-dates me, we did successfully modify our process to use traditional merges in the contexts where they are most impactful.
+As described above, that's when synchronizing a release branch with a development branch or when applying a hotfix to multiple releases.
+We still use squash-merging for putting feature branches directly into `main`, and it largely works fine unless you're trying to bisect something granularly and then you wish you had more context.
+
+### KISS
+
+As in all things, always Keep It Simple, Stupid.
+Merging is much less prone to failure than rebasing, which means that junior engineers won't require as much hand-holding on the topic and senior engineers won't accidentally screw things up as often.
+We'd all love to believe that we don't make silly Git mistakes when we're a decade into our careers, but we do.
+
+### Develop forwards, not backwards
+
+Honestly, just don't backport things.
+Unless you have a dedicated QA team who tirelessly QAs all available versions of your software (basically nobody has this), you should develop *forward* not *backward*.
+In my opinion, the structure of the Git commit graph strongly implies this is the intended usage of the software, and when you start using it as intended things get a lot easier.
+If you need to apply a fix to an old version, apply it there first and then apply it to newer versions with another merge.
+This avoids needing to use `cherry-pick` frequently, which as I explained above creates sinister duplicate nodes in your Git commit graph that become landmines that go off when you try to merge things together later.
+
+### Don't Sacrifice Introspection for Cleanliness
+
+As I tried to avoid making this post a step-by-step git tutorial with blocks of commands, one thing I didn't mention is that Git has all sorts of useful metadata on the graph that can help you (and your QA) debug issues if you follow the processes I've described.
+If you follow a squash-merge workflow that discards this metadata, when you try to verify if a fix was applied to a particular branch, you have to go look at the actual code to check, because the commits aren't the same.
+If you do a traditional merge instead, the two instances of that commit are the same exact node on the graph, and when you show it with `git show` or look at it in your Git GUI like GitHub it will just have a list of every single branch and tag that contains that commit.
+Now you can tell at a glance which branches and which releases contain that fix.
+
+The core of the point I ask you to consider is this: **Am I making more work for myself and my team just because I want my terminal output from Git to look cleaner?**
